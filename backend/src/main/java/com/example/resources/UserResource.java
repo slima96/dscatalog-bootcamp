@@ -22,6 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.dto.UserDTO;
 import com.example.dto.UserInsertDTO;
+import com.example.dto.UserUpdateDTO;
 import com.example.services.UserService;
 
 @RestController
@@ -56,22 +57,22 @@ public class UserResource {
 	
 	@PostMapping
 	public ResponseEntity<UserDTO> insert(@Valid @RequestBody UserInsertDTO dto) {
-		UserDTO newdto = service.insert(dto);
+		UserDTO newDto = service.insert(dto);
 		
 		URI uri = ServletUriComponentsBuilder
 				.fromCurrentRequest()
 				.path("/{id}")
-				.buildAndExpand(newdto.getId())
+				.buildAndExpand(newDto.getId())
 				.toUri();
 				
-		return ResponseEntity.created(uri).body(newdto);
+		return ResponseEntity.created(uri).body(newDto);
 	}
 	
 	@PutMapping(value = "/{id}")
-	public ResponseEntity<UserDTO> update(@Valid @PathVariable Long id, @RequestBody UserDTO dto) {
-		dto = service.update(id, dto);
+	public ResponseEntity<UserDTO> update(@PathVariable Long id, @Valid @RequestBody UserUpdateDTO dto) {
+		UserDTO newDto = service.update(id, dto);
 				
-		return ResponseEntity.ok().body(dto);
+		return ResponseEntity.ok().body(newDto);
 	}
 	
 	@DeleteMapping(value = "/{id}")
