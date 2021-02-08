@@ -1,5 +1,8 @@
 package com.example.dto;
 
+import com.example.services.validation.UserInsertValid;
+
+@UserInsertValid
 public class UserInsertDTO extends UserDTO {
 
 	private static final long serialVersionUID = 1L;
