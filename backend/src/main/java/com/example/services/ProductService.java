@@ -16,8 +16,8 @@ import com.example.dto.CategoryDTO;
 import com.example.dto.ProductDTO;
 import com.example.entities.Category;
 import com.example.entities.Product;
-import com.example.repositories.CategoryRespository;
-import com.example.repositories.ProductRespository;
+import com.example.repositories.CategoryRepository;
+import com.example.repositories.ProductRepository;
 import com.example.services.exceptions.DatabaseException;
 import com.example.services.exceptions.ResourceNotFoundException;
 
@@ -25,10 +25,10 @@ import com.example.services.exceptions.ResourceNotFoundException;
 public class ProductService {
 
 	@Autowired
-	private ProductRespository repository;
+	private ProductRepository repository;
 	
 	@Autowired
-	private CategoryRespository categoryRrepository;
+	private CategoryRepository categoryRrepository;
 
 	@Transactional(readOnly = true)
 	public Page<ProductDTO> findAllPaged(PageRequest pageRequest) {

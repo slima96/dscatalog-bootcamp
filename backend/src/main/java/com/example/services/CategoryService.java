@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.dto.CategoryDTO;
 import com.example.entities.Category;
-import com.example.repositories.CategoryRespository;
+import com.example.repositories.CategoryRepository;
 import com.example.services.exceptions.DatabaseException;
 import com.example.services.exceptions.ResourceNotFoundException;
 
@@ -22,7 +22,7 @@ import com.example.services.exceptions.ResourceNotFoundException;
 public class CategoryService {
 
 	@Autowired
-	private CategoryRespository repository;
+	private CategoryRepository repository;
 
 	@Transactional(readOnly = true)
 	public Page<CategoryDTO> findAllPaged(PageRequest pageRequest) {
