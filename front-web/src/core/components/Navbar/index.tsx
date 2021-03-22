@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { logout } from 'core/utils/auth';
+import { getAccessTokenDecoded, logout } from 'core/utils/auth';
 import './styles.scss';
 
 const Navbar = () => {
@@ -8,7 +8,8 @@ const Navbar = () => {
     const location = useLocation();
 
     useEffect(() => {
-        console.log(location);
+        const currentUserData = getAccessTokenDecoded();
+        setCurrentUser(currentUserData.user_name);
     }, [location]);
 
     const handleLogout = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
