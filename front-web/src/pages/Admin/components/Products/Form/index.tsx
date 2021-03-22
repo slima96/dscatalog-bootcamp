@@ -1,8 +1,10 @@
 import React from 'react';
+import { useForm } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import { makePrivateRequest } from 'core/utils/request';
 import BaseForm from '../../BaseForm';
 import './styles.scss';
-import { useForm } from 'react-hook-form';
+import { useHistory } from 'react-router';
 
 type FormState = {
     name: string;
@@ -13,9 +15,17 @@ type FormState = {
 
 const Form = () => {
     const { register, handleSubmit, errors } = useForm<FormState>();
+    const history = useHistory();
 
     const onSubmit = (data: FormState) => {
-        makePrivateRequest({ url: '/products', method: 'POST', data });
+        makePrivateRequest({ url: '/products', method: 'POST', data })
+            .then(() => {
+                toast.info('Produto cadastrado com sucesso!');
+                history.push('/admin/products');
+            })
+            .catch(() => {
+                toast.error('Erro ao salvar produto!');
+            })
     }
 
     return (
@@ -27,8 +37,8 @@ const Form = () => {
                             <input
                                 ref={register({
                                     required: "Campo obrigatório",
-                                    minLength: { value: 5, message: 'O campo deve ter no mínimo 5 caracteres'},
-                                    maxLength: { value: 60, message: 'O campo deve ter no máximo 60 caracteres'}
+                                    minLength: { value: 5, message: 'O campo deve ter no mínimo 5 caracteres' },
+                                    maxLength: { value: 60, message: 'O campo deve ter no máximo 60 caracteres' }
                                 })}
                                 name="name"
                                 type="text"
