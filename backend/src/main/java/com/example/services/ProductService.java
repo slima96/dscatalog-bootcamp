@@ -33,17 +33,17 @@ public class ProductService {
 	private ProductRepository repository;
 	
 	@Autowired
-	private CategoryRepository categoryRrepository;
+	private CategoryRepository categoryRepository;
 	
 	@Autowired
 	private S3Service s3Service;
 
 	@Transactional(readOnly = true)
 	public Page<ProductDTO> findAllPaged(Long categoryId, String name,  PageRequest pageRequest) {
-		List<Category> categories = (categoryId == 0) ? null : Arrays.asList(categoryRrepository.getOne(categoryId));
-		Page<Product> list = repository.find(categories, name, pageRequest);
-
-		return list.map(x -> new ProductDTO(x));
+		List<Category> categories = (categoryId == 0) ? null : Arrays.asList(categoryRepository.getOne(categoryId));
+		Page<Product> page = repository.find(categories, name, pageRequest);
+		repository.find(page.toList());
+		return page.map(x -> new ProductDTO(x, x.getCategories()));
 	}
 
 	@Transactional(readOnly = true)
@@ -64,6 +64,10 @@ public class ProductService {
 	public ProductDTO insert(ProductDTO dto) {
 		Product entity = new Product();
 		copyDtoToEntity(dto, entity);
+		if (entity.getCategories().size() ==0) {
+			Category cat = categoryRepository.getOne(1L);
+			entity.getCategories().add(cat);
+		}
 		entity = repository.save(entity);
 
 		return new ProductDTO(entity);
@@ -104,7 +108,7 @@ public class ProductService {
 		
 		entity.getCategories().clear();
 		for ( CategoryDTO catDto : dto.getCategories()) {
-			Category category = categoryRrepository.getOne(catDto.getId());
+			Category category = categoryRepository.getOne(catDto.getId());
 			entity.getCategories().add(category);
 		}
 	}
