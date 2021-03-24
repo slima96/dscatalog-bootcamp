@@ -5,12 +5,13 @@ import { useHistory } from 'react-router-dom';
 import Card from '../Card';
 import Pagination from 'core/components/Pagination';
 import { toast } from 'react-toastify';
+import CardLoader from '../Loaders/ProductCardLoader';
 
 const List = () => {
     const [productsResponse, setProductsResponse] = useState<ProductsResponse>();
     const [isLoading, setIsLoading] = useState(false);
     const [activePage, setActivePage] = useState(0);
-    const history = useHistory();    
+    const history = useHistory();
 
     const getProducts = useCallback(() => {
         const params = {
@@ -59,13 +60,15 @@ const List = () => {
                 ADICIONAR
             </button>
             <div className="admin-list-container">
-                {productsResponse?.content.map(product => (
-                    <Card
-                        product={product}
-                        key={product.id}
-                        onRemove={onRemove}
-                    />
-                ))}
+                {isLoading ? <CardLoader /> : (
+                    productsResponse?.content.map(product => (
+                        <Card
+                            product={product}
+                            key={product.id}
+                            onRemove={onRemove}
+                        />
+                    ))
+                )}
                 {productsResponse && (
                     <Pagination
                         totalPages={productsResponse.totalPages}
