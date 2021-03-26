@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { toast } from 'react-toastify';
 import Select from 'react-select';
 import { makePrivateRequest, makeRequest } from 'core/utils/request';
@@ -13,6 +13,7 @@ type FormState = {
     price: string;
     description: string;
     imgUrl: string;
+    categories: Category[];
 }
 
 type ParamsType = {
@@ -20,7 +21,7 @@ type ParamsType = {
 }
 
 const Form = () => {
-    const { register, handleSubmit, errors, setValue } = useForm<FormState>();
+    const { register, handleSubmit, errors, setValue, control } = useForm<FormState>();
     const history = useHistory();
     const { productId } = useParams<ParamsType>();
     const [isLoadingCategories, setIsLoadingCategories] = useState(false);
@@ -36,6 +37,7 @@ const Form = () => {
                     setValue('price', response.data.price);
                     setValue('description', response.data.description);
                     setValue('imgUrl', response.data.imgUrl);
+                    setValue('categories', response.data.categories);
                 })
         }
     }, [productId, isEditing, setValue]);
@@ -55,7 +57,7 @@ const Form = () => {
             data
         })
             .then(() => {
-                toast.info('Produto cadastrado com sucesso!');
+                toast.info('Produto salvo com sucesso!');
                 history.push('/admin/products');
             })
             .catch(() => {
@@ -88,7 +90,26 @@ const Form = () => {
                                 </div>
                             )}
                         </div>
-                        
+                        <div className="margin-bottom-30">
+                            <Controller
+                                as={Select}
+                                name="categories"
+                                rules={{ required: true }}
+                                control={control}
+                                isLoading={categories}
+                                options={categories}
+                                getOptionLabel={(option: Category) => option.name}
+                                getOptionValue={(option: Category) => String(option.id)}
+                                classNamePrefix="categories-select"
+                                placeholder="Categorias"
+                                isMulti
+                            />
+                            {errors.categories && (
+                                <div className="invalid-feedback d-block">
+                                    Campo obrigatório
+                                </div>
+                            )}
+                        </div>
                         <div className="margin-bottom-30">
                             <input
                                 ref={register({ required: "Campo obrigatório" })}
