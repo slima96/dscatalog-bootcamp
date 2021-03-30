@@ -65,7 +65,7 @@ const ProductFilters = ({ onSearch }: Props) => {
         key={`select-${category?.id}`}
         value={category}
         isLoading={isLoadingCategories}
-        options={categories}
+        option={categories}
         getOptionLabel={(option: Category) => option.name}
         getOptionValue={(option: Category) => String(option.id)}
         className="filter-select-container"

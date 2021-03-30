@@ -7,7 +7,7 @@ type LoginData = {
     password: string;
 }
 
-const BASE_URL = 'http://localhost:8080';
+const BASE_URL = process.env.REACT_APP_BACKEND_URL ?? 'https://sandro-dscatalog.herokuapp.com';
 
 axios.interceptors.response.use(function (response) {
     return response;
