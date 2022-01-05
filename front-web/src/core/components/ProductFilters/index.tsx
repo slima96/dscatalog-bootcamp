@@ -22,7 +22,7 @@ const ProductFilters = ({
 }: Props) => {
 
   const [isLoadingCategories, setIsLoadingCategories] = useState(false);
-  const [categories, setCategories] = useState<Category>();
+  const [categories, setCategories] = useState<Category[]>();
   
 
   useEffect(() => {
@@ -51,7 +51,7 @@ const ProductFilters = ({
         key={`select-${category?.id}`}
         value={category}
         isLoading={isLoadingCategories}
-        option={categories}
+        options={categories}
         getOptionLabel={(option: Category) => option.name}
         getOptionValue={(option: Category) => String(option.id)}
         className="filter-select-container"
